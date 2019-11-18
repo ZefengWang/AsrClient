@@ -2,6 +2,7 @@
 #define ASRCLIENT_H
 
 #include <QWidget>
+#include <QAudioRecorder>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AsrClient; }
