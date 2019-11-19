@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAudioRecorder>
+#include "audioutils.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AsrClient; }
@@ -18,5 +19,6 @@ public:
 
 private:
     Ui::AsrClient *ui;
+    AudioUtils *audio;
 };
 #endif // ASRCLIENT_H

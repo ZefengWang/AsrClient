@@ -9,3 +9,23 @@ NetUtils::~NetUtils()
 {
 
 }
+
+TcpClient::TcpClient()
+{
+
+}
+
+TcpClient::~TcpClient()
+{
+
+}
+
+HttpsClient::HttpsClient()
+{
+
+}
+
+HttpsClient::~HttpsClient()
+{
+
+}
