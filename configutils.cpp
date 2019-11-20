@@ -1,5 +1,6 @@
 #include "configutils.h"
 #include <QCoreApplication>
+#include <QDebug>
 
 ConfigUtils::ConfigUtils(QObject *parent) : QObject(parent)
 {
@@ -7,10 +8,14 @@ ConfigUtils::ConfigUtils(QObject *parent) : QObject(parent)
     QCoreApplication::setOrganizationDomain("www.lenovo.com");
     QCoreApplication::setApplicationName("ASR Client");
     settings = new QSettings("config.ini", QSettings::IniFormat);
+    checkConfig();
+    configPath();
+    configFile();
 }
 
 ConfigUtils::~ConfigUtils()
 {
+    qDebug() << "~ConfigUtils";
     delete settings;
     settings = nullptr;
 }
@@ -71,8 +76,32 @@ int ConfigUtils::getSampleSize()
         return 16;
 }
 
+QString ConfigUtils::getPcmName()
+{
+    configPath();
+    configFile();
+    return pcmFileStr;
+}
+
+void ConfigUtils::configPath()
+{
+    date = QDate::currentDate();
+    pcmPath = QString("./audio/%1/%2/%3").arg(date.year()).arg(date.month()).arg(date.day());
+    if (!dir.exists(pcmPath)) {
+        dir.mkpath(pcmPath);
+    }
+}
+
+void ConfigUtils::configFile()
+{
+    time = QTime::currentTime();
+    pcmFileStr = QString("%1/%2.pcm").arg(pcmPath).arg(time.toString("hh-mm-ss"));
+}
+
 void ConfigUtils::checkConfig()
 {
+    if (settings == nullptr)
+        settings = new QSettings("config.ini", QSettings::IniFormat);
     if (!settings->contains("Socket/Ip"))
         settings->setValue("Socket/Ip", "10.110.148.56");
     if (!settings->contains("Socket/Port"))

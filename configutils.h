@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QSettings>
 #include <QString>
+#include <QFile>
+#include <QTimer>
+#include <QDir>
+#include <QDate>
+#include <QTime>
 
 class ConfigUtils : public QObject
 {
@@ -19,8 +24,8 @@ public:
     int getSampleRate();
     int getChannel();
     int getSampleSize();
+    QString getPcmName();
 
-    void checkConfig();
 
 signals:
 
@@ -28,6 +33,15 @@ public slots:
 
 private:
     QSettings *settings;
+    QDate date;
+    QTime time;
+    QString pcmPath;
+    QString pcmFileStr;
+    QDir dir;
+private:
+    void configPath();
+    void configFile();
+    void checkConfig();
 };
 
 #endif // CONFIGUTILS_H
