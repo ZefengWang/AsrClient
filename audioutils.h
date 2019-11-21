@@ -19,19 +19,25 @@ public:
 
     void testtimer();
     bool setAudioParam(int sampleRate,int channel, int sampleSize);
+    void resetAudioBuffer();
 signals:
     void notify();
 
 public slots:
     void stopRecording();
     void handleStateChanged(QAudio::State newState);
-    void startAudio(QIODevice *voicedata);
+    void handleNotify();
+
+    QIODevice *  startAudio();
+    void startAudio(QIODevice *voicedevice );
 
 
 private:
     QTimer timer;
     QAudioFormat format;
     QAudioInput *audio = nullptr;
+    int buffSize = 0;
+    int notifyTime = 0;
 
 };
 

@@ -27,6 +27,8 @@ public:
 private slots:
     void on_start_clicked(bool checked);
     void replyNotify();
+    void handleReadData();
+    void handleReadData(int channel);
 private:
     Ui::AsrClient *ui;
     AudioUtils audio;
@@ -37,6 +39,8 @@ private:
     NetUtils netUtils;
     QBuffer buff;
     QByteArray byteArray;
+    char * audioBuff;
+//    QIODevice *  iodevice = nullptr;
 
 };
 #endif // ASRCLIENT_H

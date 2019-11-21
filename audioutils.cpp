@@ -11,6 +11,8 @@ AudioUtils::AudioUtils()
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SignedInt);
+    notifyTime = 1000;
+    buffSize = 32*notifyTime *2;
 }
 
 AudioUtils::~AudioUtils()
@@ -39,6 +41,7 @@ void AudioUtils::stopRecording()
 
 void AudioUtils::handleStateChanged(QAudio::State newState)
 {
+    qDebug() << "handleStateChanged" ;
     switch (newState) {
     case QAudio::StoppedState:
         if (audio->error() != QAudio::NoError) {
@@ -58,17 +61,44 @@ void AudioUtils::handleStateChanged(QAudio::State newState)
     }
 }
 
-void AudioUtils::startAudio(QIODevice *voicedata)
+QIODevice * AudioUtils::startAudio()
 {
     if (audio != nullptr)
         stopRecording();
     audio = new QAudioInput(format, this);
     connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+//    connect(audio, SIGNAL(notify()), this, SLOT(handleNotify()));
     connect(audio, SIGNAL(notify()), this, SIGNAL(notify()));
-    audio->setBufferSize(4096);
+//    audio->setBufferSize(buffSize);
     audio->setVolume(1.0);
-    audio->setNotifyInterval(6000);
-    audio->start(voicedata);
+    audio->setNotifyInterval(notifyTime);
+    QIODevice * d = audio->start();
+    return d;
+}
+
+void AudioUtils::startAudio(QIODevice *voicedevice)
+{
+    if (audio != nullptr)
+        stopRecording();
+    audio = new QAudioInput(format, this);
+    connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+//    connect(audio, SIGNAL(notify()), this, SLOT(handleNotify()));
+//    connect(audio, SIGNAL(notify()), this, SIGNAL(notify()));
+    audio->setBufferSize(buffSize);
+    qDebug() <<"buffer size" <<audio->bufferSize();
+    audio->setVolume(1.0);
+    qDebug() <<"volume" << audio->volume();
+//    audio->setNotifyInterval(notifyTime);
+    qDebug() <<"notify interval" << audio->notifyInterval();
+    audio->start(voicedevice);
+}
+
+void AudioUtils::handleNotify()
+{
+    qDebug() << "bytes ready" << audio->bytesReady() << "buffer size" << audio->bufferSize();
+//    audio->reset();
+    qDebug() << audio->processedUSecs() << "     " << audio->elapsedUSecs()
+                << "    " ;
 }
 
 void AudioUtils::testtimer()
@@ -92,5 +122,10 @@ bool AudioUtils::setAudioParam(int sampleRate, int channel, int sampleSize)
         return false;
     }
     return true;
+}
+
+void AudioUtils::resetAudioBuffer()
+{
+        audio->reset();
 }
 
