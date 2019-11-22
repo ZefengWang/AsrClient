@@ -3,6 +3,11 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QThread>
+#include <QString>
 
 class NetUtils: public QObject
 {
@@ -20,12 +25,21 @@ public:
     ~TcpClient();
 };
 
-class HttpsClient: public QObject
+class HttpsClient: public QThread
 {
     Q_OBJECT
 public:
     HttpsClient();
     ~HttpsClient();
+    void httpPostData(QNetworkRequest req, QByteArray ba);
+public slots:
+    void handleFinished(QNetworkReply*);
+signals:
+    void getHttpData(QByteArray);
+private:
+    QNetworkAccessManager manager;
+    QString result;
+
 };
 
 #endif // NETUTILS_H

@@ -2,7 +2,7 @@
 #define FILEUTILS_H
 
 #include <QObject>
-
+#include <QFile>
 
 
 class FileUtils: public QObject
@@ -12,6 +12,11 @@ public:
     FileUtils();
     ~FileUtils();
 public:
+
+private:
+    QFile pcm;
+    QFile ASR;
+    QFile log;
 
 };
 

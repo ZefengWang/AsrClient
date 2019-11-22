@@ -11,6 +11,7 @@
 #include "audiothread.h"
 #include "fileutils.h"
 #include "netutils.h"
+#include "audioio.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class AsrClient; }
@@ -26,21 +27,19 @@ public:
 
 private slots:
     void on_start_clicked(bool checked);
-    void replyNotify();
-    void handleReadData();
-    void handleReadData(int channel);
+    void getAudioData(QByteArray ba);
+    void handleHttpData(QByteArray result);
 private:
     Ui::AsrClient *ui;
     AudioUtils audio;
-
+    QByteArray ba;
     ConfigUtils config;
     AudioThread audioThread;
     FileUtils fileUtils;
     NetUtils netUtils;
-    QBuffer buff;
-    QByteArray byteArray;
+    AudioIO audioio;
     char * audioBuff;
-//    QIODevice *  iodevice = nullptr;
+    HttpsClient http;
 
 };
 #endif // ASRCLIENT_H

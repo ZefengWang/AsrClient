@@ -18,6 +18,7 @@ AudioUtils::AudioUtils()
 AudioUtils::~AudioUtils()
 {
     qDebug() << "~AudioUtils";
+    disconnect(this);
     if (timer.isActive()){
         timer.stop();
         timer.disconnect();
@@ -69,7 +70,7 @@ QIODevice * AudioUtils::startAudio()
     connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
 //    connect(audio, SIGNAL(notify()), this, SLOT(handleNotify()));
     connect(audio, SIGNAL(notify()), this, SIGNAL(notify()));
-//    audio->setBufferSize(buffSize);
+    audio->setBufferSize(buffSize);
     audio->setVolume(1.0);
     audio->setNotifyInterval(notifyTime);
     QIODevice * d = audio->start();
@@ -97,13 +98,8 @@ void AudioUtils::handleNotify()
 {
     qDebug() << "bytes ready" << audio->bytesReady() << "buffer size" << audio->bufferSize();
 //    audio->reset();
-    qDebug() << audio->processedUSecs() << "     " << audio->elapsedUSecs()
-                << "    " ;
-}
-
-void AudioUtils::testtimer()
-{
-    qDebug() << "testtimer";
+    qDebug() << "time: " << audio->processedUSecs() << " ms. " << audio->elapsedUSecs()
+                << "ms." ;
 }
 
 bool AudioUtils::setAudioParam(int sampleRate, int channel, int sampleSize)
@@ -122,10 +118,5 @@ bool AudioUtils::setAudioParam(int sampleRate, int channel, int sampleSize)
         return false;
     }
     return true;
-}
-
-void AudioUtils::resetAudioBuffer()
-{
-        audio->reset();
 }
 

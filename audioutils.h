@@ -17,9 +17,9 @@ public:
     AudioUtils();
     ~AudioUtils();
 
-    void testtimer();
+
     bool setAudioParam(int sampleRate,int channel, int sampleSize);
-    void resetAudioBuffer();
+
 signals:
     void notify();
 

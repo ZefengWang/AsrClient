@@ -9,10 +9,11 @@ AsrClient::AsrClient(QWidget *parent)
     , ui(new Ui::AsrClient)
 {
     ui->setupUi(this);
-    //    showFullScreen();
+//    this->setWindowFlags(Qt::FramelessWindowHint);
+//    showFullScreen();
     audio.setAudioParam(config.getSampleRate(),config.getChannel(),config.getSampleSize());
-    buff.setBuffer(&byteArray);
-    connect(&audio, SIGNAL(notify()), this, SLOT(replyNotify()));
+    connect(&audioio,SIGNAL(updateData(QByteArray)), this, SLOT(getAudioData(QByteArray)));
+    connect(&http, SIGNAL(getHttpData(QByteArray)), this, SLOT(handleHttpData(QByteArray)));
     audioBuff = new char[65536];
 }
 
@@ -28,65 +29,39 @@ void AsrClient::on_start_clicked(bool checked)
     qDebug() << checked;
     if (checked){
         ui->start->setText("Stop");
-        qDebug() << byteArray.length();
-//        connect(&buff,SIGNAL(bytesWritten(int)), this, SLOT(handleReadData(int)));
-        connect(&buff,SIGNAL(readyRead()), this, SLOT(handleReadData()));
-        buff.open(QIODevice::ReadWrite|QIODevice::Unbuffered|QIODevice::Truncate);
-        //iodevice =
-        audio.startAudio(&buff);
+        audioio.start();
+        audio.startAudio(&audioio);
     }
     else{
         QFile file(config.getPcmName());
         file.open(QIODevice::WriteOnly|QIODevice::Truncate|QIODevice::Unbuffered);
-        //        file.write(buff.readAll());
         QDataStream ds(&file);
-        ds << byteArray;
         ui->start->setText("Start");
-        qDebug() << byteArray.length();
-
+        audioio.stop();
         audio.stopRecording();
-        //        iodevice = nullptr;
-        //        qDebug() << iodevice;
         file.close();
-        buff.reset();
-        buff.close();
+        ui->rtText->setText("");
+//        ui->jsonText->setHtml("");
     }
 }
 
-void AsrClient::replyNotify()
+void AsrClient::getAudioData(QByteArray ba)
 {
-    //    qDebug() << "notify";
+    static int size = 0;
+    this->ba.append(ba);
+    size += ba.length();
+    if (size > 1024){
+        this->ba.clear();
+        ui->rtText->setText(QString("len of pcm: %1").arg(size));
+        http.httpPostData(QNetworkRequest(QUrl("http://10.110.148.80:8080/last/asr")),this->ba);
+        size = 0;
+        this->update();
+    }
 
 }
 
-void AsrClient::handleReadData()
+void AsrClient::handleHttpData(QByteArray result)
 {
-//    qDebug() << "handleReadData Before Read" << buff.data().length() << "  " <<buff.data().length();
-    QByteArray ba ;
-    do{
-        qint64 len  = buff.read(audioBuff, 65536);
-        qDebug() << len << "bytes had been read." << " isSequential: " << buff.isSequential();
-    } while (!buff.atEnd());
-    qDebug() << "handleReadData After Read" << buff.data().length() << "  " <<buff.data().length();
-
-
-    //    buff.buffer().remove(0,buff.buffer().length());
-    //    buff.readData(audioBuff,65536);
-    //    buff.data().data();
-    //    buff.seek(0);
-    //    buff.reset();
-    //    buff.readAll();
-    //    qDebug( "%x",buff.buffer().data()[0]);
+    ui->asrText->setHtml(result.toStdString().c_str());
 }
 
-void AsrClient::handleReadData(int channel)
-{
-    qDebug() << "handleReadData Before Read" << buff.data().length() << "  " <<buff.data().length() << " channel: "<< channel;
-    //    QByteArray ba = buff.read(buff.data().length());
-    QByteArray ba ;
-    //    buff.write(ba);
-    do{
-        qint64 len  = buff.read(audioBuff,65536);
-        qDebug() << len << "bytes had been read.";
-    } while (!buff.atEnd());
-}
