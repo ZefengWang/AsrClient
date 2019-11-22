@@ -16,26 +16,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    audioio.cpp \
-    audiothread.cpp \
-    audioutils.cpp \
-    configutils.cpp \
-    fileutils.cpp \
-    main.cpp \
-    asrclient.cpp \
-    netutils.cpp
+    src/audioio.cpp \
+    src/audiothread.cpp \
+    src/audioutils.cpp \
+    src/configutils.cpp \
+    src/fileutils.cpp \
+    src/main.cpp \
+    src/asrclient.cpp \
+    src/netutils.cpp
 
 HEADERS += \
-    asrclient.h \
-    audioio.h \
-    audiothread.h \
-    audioutils.h \
-    configutils.h \
-    fileutils.h \
-    netutils.h
+    include/asrclient.h \
+    include/audioio.h \
+    include/audiothread.h \
+    include/audioutils.h \
+    include/configutils.h \
+    include/fileutils.h \
+    include/netutils.h
 
 FORMS += \
-    asrclient.ui
+    ui/asrclient.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
