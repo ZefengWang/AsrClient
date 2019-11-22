@@ -11,8 +11,8 @@ AudioUtils::AudioUtils()
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SignedInt);
-    notifyTime = 1000;
-    buffSize = 32*notifyTime *2;
+    notifyTime = 100;
+    buffSize = 32*notifyTime;
 }
 
 AudioUtils::~AudioUtils()
@@ -83,23 +83,12 @@ void AudioUtils::startAudio(QIODevice *voicedevice)
         stopRecording();
     audio = new QAudioInput(format, this);
     connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
-//    connect(audio, SIGNAL(notify()), this, SLOT(handleNotify()));
-//    connect(audio, SIGNAL(notify()), this, SIGNAL(notify()));
     audio->setBufferSize(buffSize);
     qDebug() <<"buffer size" <<audio->bufferSize();
     audio->setVolume(1.0);
     qDebug() <<"volume" << audio->volume();
-//    audio->setNotifyInterval(notifyTime);
     qDebug() <<"notify interval" << audio->notifyInterval();
     audio->start(voicedevice);
-}
-
-void AudioUtils::handleNotify()
-{
-    qDebug() << "bytes ready" << audio->bytesReady() << "buffer size" << audio->bufferSize();
-//    audio->reset();
-    qDebug() << "time: " << audio->processedUSecs() << " ms. " << audio->elapsedUSecs()
-                << "ms." ;
 }
 
 bool AudioUtils::setAudioParam(int sampleRate, int channel, int sampleSize)

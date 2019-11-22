@@ -5,7 +5,10 @@
 #include <QAudioRecorder>
 #include <QBuffer>
 #include <QByteArray>
-
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
 #include "audioutils.h"
 #include "configutils.h"
 #include "audiothread.h"
@@ -38,8 +41,7 @@ private:
     FileUtils fileUtils;
     NetUtils netUtils;
     AudioIO audioio;
-    char * audioBuff;
     HttpsClient http;
-
+    QJsonArray json;
 };
 #endif // ASRCLIENT_H

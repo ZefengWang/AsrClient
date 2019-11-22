@@ -37,7 +37,7 @@ void HttpsClient::httpPostData(QNetworkRequest req, QByteArray ba)
 
 void HttpsClient::handleFinished(QNetworkReply * httpResult)
 {
-    qDebug() <<httpResult->rawHeaderPairs();
+//    qDebug() <<httpResult->rawHeaderPairs();
     emit getHttpData(httpResult->readAll());
     httpResult->deleteLater();
 }

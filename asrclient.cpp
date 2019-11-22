@@ -14,13 +14,13 @@ AsrClient::AsrClient(QWidget *parent)
     audio.setAudioParam(config.getSampleRate(),config.getChannel(),config.getSampleSize());
     connect(&audioio,SIGNAL(updateData(QByteArray)), this, SLOT(getAudioData(QByteArray)));
     connect(&http, SIGNAL(getHttpData(QByteArray)), this, SLOT(handleHttpData(QByteArray)));
-    audioBuff = new char[65536];
+//    audioBuff = new char[65536];
 }
 
 AsrClient::~AsrClient()
 {
     delete ui;
-    delete [] audioBuff;
+//    delete [] audioBuff;
 }
 
 
@@ -41,7 +41,6 @@ void AsrClient::on_start_clicked(bool checked)
         audio.stopRecording();
         file.close();
         ui->rtText->setText("");
-//        ui->jsonText->setHtml("");
     }
 }
 
@@ -52,16 +51,26 @@ void AsrClient::getAudioData(QByteArray ba)
     size += ba.length();
     if (size > 1024){
         this->ba.clear();
-        ui->rtText->setText(QString("len of pcm: %1").arg(size));
-        http.httpPostData(QNetworkRequest(QUrl("http://10.110.148.80:8080/last/asr")),this->ba);
+//        ui->rtText->setText(QString("len of pcm: %1").arg(size));
+        http.httpPostData(QNetworkRequest(QUrl(config.getHttpUrl())),QByteArray());
         size = 0;
         this->update();
     }
-
 }
 
 void AsrClient::handleHttpData(QByteArray result)
 {
-    ui->asrText->setHtml(result.toStdString().c_str());
+    QJsonParseError jsonError;
+    QJsonDocument jsDoc = QJsonDocument::fromJson(result,&jsonError);
+    if (jsonError.error != QJsonParseError::NoError) {
+        qDebug() << "json trans failed!";
+    }
+    QJsonObject jsObj = jsDoc.object();
+    QStringList keys = jsObj.keys();
+    ui->jsonText->clear();
+    for (int i = 0; i < keys.length(); ++i) {
+        ui->jsonText->append(QString("%1\t:%2").arg(keys.at(i)).arg(jsObj.value(keys.at(i)).toVariant().toString()));
+    }
+    ui->rtText->setText(jsObj.value("rawText").toVariant().toString());
 }
 

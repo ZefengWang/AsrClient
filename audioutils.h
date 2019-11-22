@@ -26,7 +26,6 @@ signals:
 public slots:
     void stopRecording();
     void handleStateChanged(QAudio::State newState);
-    void handleNotify();
 
     QIODevice *  startAudio();
     void startAudio(QIODevice *voicedevice );

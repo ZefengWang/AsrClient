@@ -1,5 +1,6 @@
 #include "audioio.h"
 #include <QDebug>
+
 AudioIO::AudioIO()
 {
 
@@ -13,11 +14,6 @@ void AudioIO::start()
 void AudioIO::stop()
 {
     close();
-}
-
-qreal AudioIO::level() const
-{
-    return m_level;
 }
 
 qint64 AudioIO::readData(char *data, qint64 maxlen)

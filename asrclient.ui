@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>AsrClient</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
    <item row="2" column="0">
     <widget class="QTextEdit" name="asrText">
      <property name="readOnly">

@@ -19,13 +19,12 @@ public:
 
     QString getIp();
     int getPort();
-    QString getDomin();
+    QString getHttpUrl();
     QString getMode();
     int getSampleRate();
     int getChannel();
     int getSampleSize();
     QString getPcmName();
-
 
 signals:
 
