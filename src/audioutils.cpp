@@ -17,7 +17,6 @@ AudioUtils::AudioUtils()
 
 AudioUtils::~AudioUtils()
 {
-    qDebug() << "~AudioUtils";
     disconnect(this);
     if (timer.isActive()){
         timer.stop();
@@ -42,7 +41,7 @@ void AudioUtils::stopRecording()
 
 void AudioUtils::handleStateChanged(QAudio::State newState)
 {
-    qDebug() << "handleStateChanged" ;
+    qDebug() << "handleStateChanged" << newState <<audio->error() ;
     switch (newState) {
     case QAudio::StoppedState:
         if (audio->error() != QAudio::NoError) {

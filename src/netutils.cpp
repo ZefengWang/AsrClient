@@ -1,4 +1,5 @@
 #include "include/netutils.h"
+#include <QFile>
 
 NetUtils::NetUtils()
 {
@@ -35,8 +36,13 @@ void HttpsClient::httpPostData(QNetworkRequest req, QByteArray ba)
     manager.post(req,ba);
 }
 
+void HttpsClient::httpGetData(QNetworkRequest req)
+{
+    manager.get(req);
+}
+
 void HttpsClient::handleFinished(QNetworkReply * httpResult)
 {
-    emit getHttpData(httpResult->readAll());
+    emit sendHttpData(httpResult->readAll());
     httpResult->deleteLater();
 }

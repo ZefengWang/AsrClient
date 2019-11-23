@@ -6,7 +6,7 @@ ConfigUtils::ConfigUtils(QObject *parent) : QObject(parent)
 {
     QCoreApplication::setOrganizationName("Lenovo");
     QCoreApplication::setOrganizationDomain("www.lenovo.com");
-    QCoreApplication::setApplicationName("ASR Client");
+    QCoreApplication::setApplicationName("AsrClient");
     settings = new QSettings("config.ini", QSettings::IniFormat);
     checkConfig();
     configPath();
@@ -15,7 +15,6 @@ ConfigUtils::ConfigUtils(QObject *parent) : QObject(parent)
 
 ConfigUtils::~ConfigUtils()
 {
-    qDebug() << "~ConfigUtils";
     delete settings;
     settings = nullptr;
 }
@@ -91,7 +90,7 @@ QString ConfigUtils::getPcmName()
 void ConfigUtils::configPath()
 {
     date = QDate::currentDate();
-    pcmPath = QString("./audio/%1/%2/%3").arg(date.year()).arg(date.month()).arg(date.day());
+    pcmPath = QString("./Record/%1/%2/%3").arg(date.year()).arg(date.month()).arg(date.day());
     if (!dir.exists(pcmPath)) {
         dir.mkpath(pcmPath);
     }
@@ -125,7 +124,6 @@ void ConfigUtils::checkConfig()
         settings->setValue("Audio/Channel", 1);
     if (!settings->contains("Audio/SampleSize"))
         settings->setValue("Audio/SampleSize", 16);
-
     if (!settings->contains("Param/cpf"))
         settings->setValue("Param/cpf", "multi");
     if (!settings->contains("Param/dtp"))

@@ -15,6 +15,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+TARGET = AsrClient
+#LIBS += lib/libeay32.dll \
+#        lib/ssleay.dll
+
+LIBS += lib/libeay32.dll \
+        lib/ssleay.dll \
+        lib/libcrypto-1_1-x64.dll \
+        libssl-1_1-x64.dll
+
 SOURCES += \
     src/audioio.cpp \
     src/audiothread.cpp \

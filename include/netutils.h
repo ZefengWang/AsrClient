@@ -6,8 +6,10 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QSslCertificate>
 #include <QThread>
 #include <QString>
+#include <QByteArray>
 
 class NetUtils: public QObject
 {
@@ -32,13 +34,16 @@ public:
     HttpsClient();
     ~HttpsClient();
     void httpPostData(QNetworkRequest req, QByteArray ba);
+    void httpGetData(QNetworkRequest req);
+
 public slots:
     void handleFinished(QNetworkReply*);
 signals:
-    void getHttpData(QByteArray);
+    void sendHttpData(QByteArray);
 private:
     QNetworkAccessManager manager;
     QString result;
+//    QByteArray byteArray;
 
 };
 

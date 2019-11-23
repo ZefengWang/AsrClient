@@ -21,7 +21,6 @@ public:
     bool setAudioParam(int sampleRate,int channel, int sampleSize);
 
 signals:
-    void notify();
 
 public slots:
     void stopRecording();

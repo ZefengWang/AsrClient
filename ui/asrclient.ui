@@ -14,24 +14,14 @@
    <string>AsrClient</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
-   <item row="2" column="0">
-    <widget class="QTextEdit" name="asrText">
+   <item row="1" column="0">
+    <widget class="QLineEdit" name="rtText">
      <property name="readOnly">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QTextEdit" name="jsonText">
-     <property name="undoRedoEnabled">
-      <bool>true</bool>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
+   <item row="1" column="1">
     <widget class="QPushButton" name="start">
      <property name="text">
       <string>Start</string>
@@ -50,8 +40,8 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLineEdit" name="rtText">
+   <item row="2" column="0" colspan="2">
+    <widget class="QTextEdit" name="asrText">
      <property name="readOnly">
       <bool>true</bool>
      </property>

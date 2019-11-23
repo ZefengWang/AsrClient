@@ -32,7 +32,7 @@ public:
 
 private slots:
     void on_start_clicked(bool checked);
-    void getAudioData(QByteArray ba);
+    void handleAudioData(QByteArray ba);
     void handleHttpData(QByteArray result);
 private:
     Ui::AsrClient *ui;
@@ -44,6 +44,5 @@ private:
     NetUtils netUtils;
     AudioIO audioio;
     HttpsClient http;
-    QJsonArray json;
 };
 #endif // ASRCLIENT_H
